@@ -19,7 +19,6 @@ function flipCoin(){
 }
 
 #one coin simulation
-
 for(( i=1;i<=NO_OF_SIMULATION;i++ ))
 do
 	coin=$(flipCoin)
