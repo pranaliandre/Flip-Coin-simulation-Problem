@@ -1,39 +1,63 @@
 #!/bin/bash -x
-#constant variable
-NO_OF_SIMULATION=10
-#variable
-hCount=0
-tCount=0
-#initiatilizing a dictionary
-declare -A dictionary
-echo "Welcome a in flip coin simulation"
-#function to flip coin
-function flipCoin(){
-   local randomFlip=$((RANDOM%2))
-   if [ $randomFlip -eq 1 ] ;
-   then
-      echo "Heads"
-   else
-      echo "Tails"
-   fi
+
+#start flip coin simulation for singlet, doublet
+function startSimulate()
+{
+	read -p "do you want to flip the coin? if yes press 'y' otherwise press n for exit :  " flipping
+	while [  $flipping == 'y' ]
+	do
+		read -p "How many times do you want to flips the coin? : " flipCoin
+		echo -e "Which combination you want\nEnter your choice\n 1.Singlet\n 2.Doublet\n "
+		read combination
+		if [ $combination -eq 1 ]
+		then
+			simulate $flipCoin $combination
+		elif [ $combination -eq 2 ]
+		then
+			simulate $flipCoin $combination
+		else
+				echo "Invalid Choice"
+		fi
+		read -p "Do you want to play again? if yes press 'y' otherwise press any key for exit : " flipping
+	done
 }
 
-#one coin simulation
-for(( i=1;i<=NO_OF_SIMULATION;i++ ))
-do
-	coin=$(flipCoin)
-	if [ $coin = "Heads" ]
-	then
-		(( hCount++ ))
-	else
-		(( tCount++ ))
-	fi
-done
+#flips coin and gerate the combination
+function simulate()
+{
+	local flipCoin=$1
+	local combination=$2
+	
+	#initializing a dictionary
+	declare -A combinationCoin
 
-dictionary[1]=$hCount #store head count in dictionary
-dictionary[2]=$tCount #store tail count in dictionary
+	for((i=1;i<=flipCoin;i++))
+	do
+		flipCoinSides=""
+		for((j=1;j<=combination;j++))
+		do
+			if [[ $(( RANDOM % 2 )) -eq 1 ]];
+			then
+				flipCoinSides+="H"
+			else
+				flipCoinSides+="T"
+			fi
+		done
+		combinationCoin[$flipCoinSides]=$((${combinationCoin[$flipCoinSides]}+1))
+	done
+	combinationPercentage
+}
 
-echo "${!dictionary[@]}" value="${dictionary[@]}"
-#percentage of heads and tails
-hPercentage=`echo "scale=2; ($hCount/$NO_OF_SIMULATION)*100" | bc` #singlet head percentange
-tPercentage=`echo "scale=2; ($tCount/$NO_OF_SIMULATION)*100" | bc` #singlet tails percentahe
+#calculate percentage of each combination 
+function combinationPercentage
+{
+	echo "Combination  :  Percentage "
+	for i in ${!combinationCoin[@]}
+	do
+		combinationCoin[$i]=$(( combinationCoin[$i]*100/flipCoin ))
+		echo $i"    "${combinationCoin[$i]}	
+	done
+}
+
+#Start the flip coin Simulation
+startSimulate
