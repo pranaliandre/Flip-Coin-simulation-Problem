@@ -7,12 +7,15 @@ function startSimulate()
 	while [  $flipping == 'y' ]
 	do
 		read -p "How many times do you want to flips the coin? : " flipCoin
-		echo -e "Which combination you want\nEnter your choice\n 1.Singlet\n 2.Doublet\n "
+		echo -e "Which combination you want\nEnter your choice\n 1.Singlet\n 2.Doublet\n 3.Triplet\n"
 		read combination
 		if [ $combination -eq 1 ]
 		then
 			simulate $flipCoin $combination
 		elif [ $combination -eq 2 ]
+		then
+			simulate $flipCoin $combination
+		elif [ $combination -eq 3 ]
 		then
 			simulate $flipCoin $combination
 		else
