@@ -60,7 +60,15 @@ function combinationPercentage
 		combinationCoin[$i]=$(( combinationCoin[$i]*100/flipCoin ))
 		echo $i"    "${combinationCoin[$i]}	
 	done
+	winingCombination
 }
-
+#function of sorting the  combination and finding the winning combination
+function winingCombination(){
+	echo "wining_combination : Percentage "
+	for i in ${!combinationCoin[@]}
+	do
+		echo -e "$i : ${combinationCoin[$i]}"
+	done | sort -k3 -rn |head -n 1
+}
 #Start the flip coin Simulation
 startSimulate
